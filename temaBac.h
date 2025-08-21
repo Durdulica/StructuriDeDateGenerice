@@ -40,7 +40,7 @@
 
 //Varianta 13 Sub. II: b
 
-//Varianta 14 Sub. II: b
+//Varianta 14 Sub. II: c
 
 //Varianta 15 Sub. II: a
 
