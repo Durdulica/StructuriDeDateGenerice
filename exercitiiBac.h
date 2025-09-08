@@ -313,6 +313,30 @@ void ex14() {
     }
 
     list->head->next->data = list->head->data;
+}
 
+//Varianta 20: se considera o stiva si o coada. In ambele se introduc aceleasi numere. Care este ultima valoare introdusa
+//in stiva si care este ultima valoare adaugata in coada in urma: c->s c->s s->c c->s s->c s->c c->s
+
+void ex15() {
+    Stiva<int> *stiva = new Stiva<int>();
+    Queue<int> *queue = new Queue<int>();
+    queue->capacity = 100;
+    int n;
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        stiva->push(i);
+        queue->push(i);
+    }
+
+    stiva->push(queue->pop()->data);
+    stiva->push(queue->pop()->data);
+    queue->push(stiva->pop()->data);
+    stiva->push(queue->pop()->data);
+    queue->push(stiva->pop()->data);
+    queue->push(stiva->pop()->data);
+    stiva->push(queue->pop()->data);
+    cout << stiva->peek()->data << " ";
+    cout << queue->rear->data;
 }
 #endif //EXERCITIIBAC_H

@@ -11,4 +11,6 @@ add_executable(StructuriDeDateGenerice main.cpp
         sistemTicketing.h
         temaBac.h
         exercitiiBac.h
+        arboriIerarhie.h
+        arboreFisier.h
 )
