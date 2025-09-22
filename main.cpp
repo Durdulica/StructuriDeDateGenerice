@@ -10,6 +10,6 @@ int main() {
     arbore->addChild(arbore->root, 45);
     arbore->addChild(arbore->root, 55);
 
-    cout << arbore->getDepth(20);
-
+    arbore->remove(arbore->root, 60);
+    arbore->afisare();
 }

@@ -9,7 +9,6 @@ add_executable(StructuriDeDateGenerice main.cpp
         stiva.h
         probleme.h
         sistemTicketing.h
-        temaBac.h
         exercitiiBac.h
         arboriIerarhie.h
         arboreFisier.h

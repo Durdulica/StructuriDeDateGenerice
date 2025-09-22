@@ -16,7 +16,7 @@ struct ArboreBinar {
         root = new BinaryNode(value);
     }
 
-    BinaryNode *addChild(BinaryNode *node,int value) {
+    BinaryNode *addChild(BinaryNode *node, int value) {
         if (node == nullptr) {
             return new BinaryNode(value);
         }
@@ -30,23 +30,20 @@ struct ArboreBinar {
     }
 
     int getHeight(BinaryNode *node) {
-        if(!node) {
-            return -1;
-        }
+        if(!node) return -1;
 
         return 1 + max(getHeight(node->left), getHeight(node->right));
     }
 
-    //todo: change node typo to int value
-    int getDepth(int nr) {
+    int getDepth(int value) {
         int index = 0;
         BinaryNode *current = root;
         while (current != nullptr) {
-            if(nr > current->data) {
+            if(value > current->data) {
                 current = current->right;
                 index++;
             }
-            else if (nr < current->data) {
+            else if (value < current->data) {
                 current = current->left;
                 index++;
             }
@@ -75,16 +72,6 @@ struct ArboreBinar {
         return false;
     }
 
-    void queueUp(Queue<BinaryNode *> *queue, BinaryNode *node) {
-        cout << node->data << " ";
-        if(node->left != nullptr) {
-            queue->push(node->left);
-        }
-        if(node->right != nullptr) {
-            queue->push(node->right);
-        }
-    }
-
     void afisare() {
         BinaryNode *current = nullptr;
 
@@ -106,6 +93,74 @@ struct ArboreBinar {
             }
             cout << endl;
         }
+    }
+
+    //todo: D L R
+    void preorder(BinaryNode *current) {
+        if(current == nullptr) return;
+
+        cout << current->data << " ";
+        preorder(current->left);
+        preorder(current->right);
+    }
+
+    //todo: L D R
+    void inorder(BinaryNode *current) {
+        if(current == nullptr) return;
+
+        inorder(current->left);
+        cout << current->data << " ";
+        inorder(current->right);
+    }
+
+    //todo: L R D
+    void postorder(BinaryNode *current) {
+        if(current == nullptr) return;
+
+        postorder(current->left);
+        postorder(current->right);
+        cout << current->data << " ";
+    }
+
+    BinaryNode *findMin(BinaryNode *node) {
+        while(node && node->left) {
+            node = node->left;
+        }
+        return node;
+    }
+
+    BinaryNode *remove(BinaryNode *node, int value) {
+        if(!node) return nullptr;
+
+        if(value < node->data) {
+            node->left = remove(node->left, value);
+        }
+        else if(value > node->data) {
+            node->right = remove(node->right, value);
+        }
+        else {
+            if(!node->left && !node->right) {
+                delete node;
+                return nullptr;
+            }
+
+            if(!node->left) {
+                BinaryNode *temp = node->right;
+                delete node;
+                return temp;
+            }
+
+            if(!node->right) {
+                BinaryNode *temp = node->left;
+                delete node;
+                return temp;
+            }
+
+            BinaryNode *succ = findMin(node->right);
+            node->data = succ->data;
+            node->right = remove(succ, succ->data);
+        }
+        return node;
     }
 };
 #endif //ARBOREBINAR_H

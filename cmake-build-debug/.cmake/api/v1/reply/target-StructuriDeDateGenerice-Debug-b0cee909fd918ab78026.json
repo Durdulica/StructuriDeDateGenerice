@@ -106,8 +106,7 @@
 				8,
 				9,
 				10,
-				11,
-				12
+				11
 			]
 		}
 	],
@@ -142,11 +141,6 @@
 		{
 			"backtrace" : 1,
 			"path" : "sistemTicketing.h",
-			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 1,
-			"path" : "temaBac.h",
 			"sourceGroupIndex" : 1
 		},
 		{
