@@ -1,28 +1,15 @@
-#include "arboreExpresii.h"
+#include "arboreBinar.h"
 
 int main() {
-    string expr;
-    cout << "Enter an expression (use + - * / and parantheses): ";
-    getline(cin, expr);
+    ArboreBinar *arbore = new ArboreBinar(50);
+    arbore->addChild(arbore->root, 40);
+    arbore->addChild(arbore->root, 20);
+    arbore->addChild(arbore->root, 60);
+    arbore->addChild(arbore->root, 30);
+    arbore->addChild(arbore->root, 10);
+    arbore->addChild(arbore->root, 45);
+    arbore->addChild(arbore->root, 55);
 
-    Expresii *arbore = new Expresii();
+    cout << arbore->getDepth(20);
 
-    string postfix[100];
-    int n = arbore->infixToPostfix(expr, postfix);
-
-    arbore->root = arbore->buildTree(postfix, n);
-
-    cout << "Infix Expression: ";
-    arbore->printInfix(arbore->root);
-    cout << endl;
-
-    cout << "Prefix Expression: ";
-    arbore->printPrefix(arbore->root);
-    cout << endl;
-
-    cout << "Postfix Expression: ";
-    arbore->printPostfix(arbore->root);
-    cout << endl;
-
-    cout << "Result = " << arbore->evaluate(arbore->root) << endl;
 }
