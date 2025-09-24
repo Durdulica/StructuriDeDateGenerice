@@ -95,7 +95,7 @@ struct ArboreBinar {
         }
     }
 
-    //todo: D L R
+    ///D L R
     void preorder(BinaryNode *current) {
         if(current == nullptr) return;
 
@@ -104,7 +104,7 @@ struct ArboreBinar {
         preorder(current->right);
     }
 
-    //todo: L D R
+    ///L D R
     void inorder(BinaryNode *current) {
         if(current == nullptr) return;
 
@@ -113,7 +113,7 @@ struct ArboreBinar {
         inorder(current->right);
     }
 
-    //todo: L R D
+    ///L R D
     void postorder(BinaryNode *current) {
         if(current == nullptr) return;
 
@@ -122,7 +122,8 @@ struct ArboreBinar {
         cout << current->data << " ";
     }
 
-    BinaryNode *findMin(BinaryNode *node) {
+    BinaryNode *succesor(BinaryNode *node) {
+        node = node->right;
         while(node && node->left) {
             node = node->left;
         }
@@ -156,7 +157,7 @@ struct ArboreBinar {
                 return temp;
             }
 
-            BinaryNode *succ = findMin(node->right);
+            BinaryNode *succ = succesor(node);
             node->data = succ->data;
             node->right = remove(succ, succ->data);
         }
