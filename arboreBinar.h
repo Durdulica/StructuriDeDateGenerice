@@ -30,7 +30,7 @@ struct ArboreBinar {
     }
 
     int getHeight(BinaryNode *node) {
-        if(!node) return -1;
+        if(!node) return 0;
 
         return 1 + max(getHeight(node->left), getHeight(node->right));
     }
@@ -54,12 +54,12 @@ struct ArboreBinar {
         return -1;
     }
 
-    bool search(int value) {
+    BinaryNode* search(int value) {
         BinaryNode *current = root;
 
         while(current != nullptr) {
             if(current->data == value) {
-                return true;
+                return current;
             }
             if(value < current->data) {
                 current = current->left;
@@ -69,7 +69,7 @@ struct ArboreBinar {
             }
         }
 
-        return false;
+        return nullptr;
     }
 
     void afisare() {
@@ -162,6 +162,16 @@ struct ArboreBinar {
             node->right = remove(succ, succ->data);
         }
         return node;
+    }
+
+    bool isBST(BinaryNode *current, int min = INT_MIN, int max = INT_MAX) {
+        if(current == nullptr) {
+            return true;
+        }
+        if(current->data <= min || current->data >= max) {
+            return false;
+        }
+        return isBST(current->left, min, current->data) && isBST(current->right, current->data, max);
     }
 };
 #endif //ARBOREBINAR_H
