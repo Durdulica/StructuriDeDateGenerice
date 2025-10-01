@@ -2,7 +2,7 @@
 #define ARBOREGENEALOGIC_H
 #include "stiva.h"
 
-struct NodeGen {
+/*struct NodeGen {
     NodeGen *mother = nullptr;
     NodeGen *father = nullptr;
     NodeGen *mate = nullptr;
@@ -190,5 +190,5 @@ struct ArboreGenealogic {
             queueUp(queue,current);
         }
     }
-};
+};*/
 #endif //ARBOREGENEALOGIC_H

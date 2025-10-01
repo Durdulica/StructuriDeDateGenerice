@@ -16,4 +16,5 @@ add_executable(StructuriDeDateGenerice main.cpp
         arboreExpresii.h
         arboreBinar.h
         exercitiiArboriBinari.h
+        arboreGeneric.h
 )

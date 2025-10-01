@@ -1,7 +1,7 @@
 #ifndef EXERCITIIARBORI_H
 #define EXERCITIIARBORI_H
 #include "arboreBinar.h"
-
+#include "arboreGeneric.h"
 //sa se afis frunzele unui arbore binar
 
 void citireArbore(ArboreBinar *arbore) {
@@ -410,11 +410,259 @@ void ex14() {
 
 //sa se det. nr. de frunze situate pe un nivel k
 
+int ctFrunzeNivelArbore(BinaryNode *current, int k) {
+    if(current == nullptr) {
+        return 0;
+    }
+
+    Queue<BinaryNode *> *queue = new Queue<BinaryNode *>;
+    queue->capacity = 100;
+    queue->push(current);
+    int ind = 1;
+    while(!queue->isEmpty()) {
+        int size = queue->count, ct = 0;
+        for(int i = 0; i < size; i++) {
+            current = queue->pop()->data;
+            if(current->left != nullptr) {
+                queue->push(current->left);
+            }
+            if(current->right != nullptr) {
+                queue->push(current->right);
+            }
+
+            if(current->left == nullptr && current->right == nullptr) {
+                ct++;
+            }
+        }
+        if(ind == k) {
+            return ct;
+        }
+        ind++;
+    }
+    return 0;
+}
 
 void ex15() {
     ArboreBinar *arbore = new ArboreBinar(30);
     citireArbore(arbore);
 
+    cout << ctFrunzeNivelArbore(arbore->root, 2);
+}
 
+//sa se verif. daca arborele contine perechi de valori consec (x; x+1), memorate in vf aflate in relatia tata-fiu
+
+bool perechiConsecArbore(BinaryNode *current) {
+    if(current == nullptr) {
+        return false;
+    }
+    Queue<BinaryNode *> *queue = new Queue<BinaryNode *>;
+    queue->capacity = 100;
+    queue->push(current);
+    while(!queue->isEmpty()) {
+        int size = queue->count;
+        for(int i = 0; i < size; i++) {
+            current = queue->pop()->data;
+            if(current->left != nullptr) {
+                if(current->left->data + 1 == current->data) {
+                    return true;
+                }
+                queue->push(current->left);
+            }
+            if(current->right != nullptr) {
+                if(current->data + 1 == current->right->data) {
+                    return true;
+                }
+                queue->push(current->right);
+            }
+        }
+    }
+    return false;
+}
+
+void ex16() {
+    ArboreBinar *arbore = new ArboreBinar(30);
+    citireArbore(arbore);
+
+    cout << perechiConsecArbore(arbore->root);
+}
+
+//sa se realizeze operatia find-replace, adica toate nodurile din arbore de val. x vor fi regasite si inlocuite cu val. y
+
+void findReplaceArbore(BinaryNode *current, int x, int y) {
+    if(current == nullptr) {
+        return;
+    }
+
+    Queue<BinaryNode *> *queue = new Queue<BinaryNode *>;
+    queue->capacity = 100;
+    queue->push(current);
+
+    while(!queue->isEmpty()) {
+        int size = queue->count;
+        for(int i = 0; i < size; i++) {
+            current = queue->pop()->data;
+            if(current->left != nullptr) {
+                queue->push(current->left);
+            }
+            if(current->right != nullptr) {
+                queue->push(current->right);
+            }
+
+            if(current->data == x) {
+                current->data = y;
+            }
+        }
+    }
+}
+
+void ex17() {
+    ArboreBinar *arbore = new ArboreBinar(30);
+    citireArbore(arbore);
+
+    findReplaceArbore(arbore->root, 30, 67);
+    arbore->afisare();
+}
+
+//sa se verifice daca doi arbori sunt egali
+
+bool arboriEgali(BinaryNode* root1, BinaryNode* root2) {
+    if(root1 == nullptr || root2 == nullptr) {
+        return false;
+    }
+
+    Queue<BinaryNode *> *queue1 = new Queue<BinaryNode *>;
+    queue1->capacity = 100;
+    queue1->push(root1);
+    Queue<BinaryNode *> *queue2 = new Queue<BinaryNode *>;
+    queue2->capacity = 100;
+    queue2->push(root2);
+
+    while(!queue1->isEmpty() && !queue2->isEmpty()) {
+        if(queue1->count != queue2->count) {
+            return false;
+        }
+        int size = queue1->count;
+        for(int i = 0; i < size; i++) {
+            root1 = queue1->pop()->data;
+            root2 = queue2->pop()->data;
+            cout << root1->data << " " << root2->data << "  ";
+            if(root1->data != root2->data) {
+                return false;
+            }
+
+            if(root1->left != nullptr || root2->left != nullptr) {
+                if(root1->left == nullptr || root2->left == nullptr) {
+                    queue1->deleteQueue();
+                    queue2->deleteQueue();
+                    return false;
+                }
+
+                queue1->push(root1->left);
+                queue2->push(root2->left);
+            }
+
+            if(root1->right != nullptr || root2->right != nullptr) {
+                if(root1->right == nullptr || root2->right == nullptr) {
+                    queue1->deleteQueue();
+                    queue2->deleteQueue();
+                    return false;
+                }
+                queue1->push(root1->right);
+                queue2->push(root2->right);
+            }
+        }
+    }
+    return true;
+}
+
+void ex18() {
+    ArboreBinar *arb1 = new ArboreBinar(30);
+    ArboreBinar *arb2 = new ArboreBinar(30);
+    citireArbore(arb1);
+    citireArbore(arb2);
+
+    cout << arboriEgali(arb1->root, arb2->root) << endl;
+}
+
+//sa se verif. daca subarborii stangi si drepti al unui arbore au structura in oglinda
+
+bool structOglindaArbore(NodeGen<int> *left, NodeGen<int> *right) {
+    if(left == nullptr || right == nullptr) {
+        if(left == nullptr && right == nullptr) {
+            return true;
+        }
+        return false;
+    }
+
+    Queue<NodeGen<int> *> *queue1 = new Queue<NodeGen<int> *>;
+    queue1->capacity = 100;
+    queue1->push(left);
+    Queue<NodeGen<int> *> *queue2 = new Queue<NodeGen<int> *>;
+    queue2->capacity = 100;
+    queue2->push(right);
+
+    while(!queue1->isEmpty() && !queue2->isEmpty()) {
+        if(queue1->count != queue2->count) {
+            return false;
+        }
+        int size = queue1->count;
+        for(int i = 0; i < size; i++) {
+            left = queue1->pop()->data;
+            right = queue2->pop()->data;
+
+            if(left->data != right->data) {
+                return false;
+            }
+
+            if(left->left != nullptr || right->right != nullptr) {
+                if(left->left == nullptr || right->right == nullptr) {
+                    queue1->deleteQueue();
+                    queue2->deleteQueue();
+                    return false;
+                }
+                queue1->push(left->left);
+                queue2->push(right->right);
+            }
+
+            if(left->right != nullptr || right->left != nullptr) {
+                if(left->right == nullptr || right->left == nullptr) {
+                    queue1->deleteQueue();
+                    queue2->deleteQueue();
+                    return false;
+                }
+                queue1->push(left->right);
+                queue2->push(right->left);
+            }
+        }
+    }
+    return true;
+}
+
+void ex19() {
+    ArboreGeneric<int> *arbore = new ArboreGeneric<int>;
+    arbore->root = arbore->citirePre();
+
+    cout << structOglindaArbore(arbore->root->left, arbore->root->right);
+}
+
+//sa se scrie o functie care verif. cate noduri pare sunt intr-un arbore.
+
+int ctPareArbore(NodeGen<int> *node) {
+    if(node == nullptr) {
+        return 0;
+    }
+
+    if(node->data % 2 == 0) {
+        return 1 + ctPareArbore(node->left) + ctPareArbore(node->right);
+    }
+
+    return ctPareArbore(node->left) + ctPareArbore(node->right);
+}
+
+void ex20() {
+    ArboreGeneric<int> *arbore = new ArboreGeneric<int>;
+    arbore->root = arbore->citirePre();
+
+    cout << ctPareArbore(arbore->root->left);
 }
 #endif //EXERCITIIARBORI_H
