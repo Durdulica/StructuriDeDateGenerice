@@ -645,7 +645,8 @@ void ex19() {
     cout << structOglindaArbore(arbore->root->left, arbore->root->right);
 }
 
-//sa se scrie o functie care verif. cate noduri pare sunt intr-un arbore.
+//sa se scrie o functie care verif. cate noduri pare sunt intr-un arbore. Sa se foloseasca aceasta fc. pt. identificarea
+//subarborelui radacinii ce contine cel mai multe valori pare
 
 int ctPareArbore(NodeGen<int> *node) {
     if(node == nullptr) {
@@ -659,10 +660,104 @@ int ctPareArbore(NodeGen<int> *node) {
     return ctPareArbore(node->left) + ctPareArbore(node->right);
 }
 
+NodeGen<int>* maxPareArbore(NodeGen<int> *node) {
+    if(node == nullptr) {
+        return nullptr;
+    }
+
+    if(ctPareArbore(node->left) >= ctPareArbore(node->right) && ctPareArbore(node->left) == ctPareArbore(node)) {
+        return maxPareArbore(node->left);
+    }
+
+
+    if(ctPareArbore(node->right) > ctPareArbore(node->left) && ctPareArbore(node->right) == ctPareArbore(node)) {
+        return maxPareArbore(node->right);
+    }
+
+    return node;
+}
+
 void ex20() {
     ArboreGeneric<int> *arbore = new ArboreGeneric<int>;
     arbore->root = arbore->citirePre();
 
-    cout << ctPareArbore(arbore->root->left);
+    NodeGen<int> *max = maxPareArbore(arbore->root);
+
 }
+
+//sa se afiseze succesiv nodul primului vf. de pe fiecare nivel al arborelui
+
+void afisLeftArbore(NodeGen<int>* current) {
+    if(current == nullptr) {
+        return;
+    }
+    cout << current->data << " ";
+    return afisLeftArbore(current->left);
+}
+
+void ex21() {
+    ArboreGeneric<int> *arbore = new ArboreGeneric<int>;
+    arbore->root = arbore->citirePre();
+    afisLeftArbore(arbore->root);
+}
+
+//sa se afiseze succesiv nodul din st. vf. si din dr. vf. alternativ
+
+void afisAlternativaArbore(NodeGen<int>* current, int k = 0) {
+    if(current == nullptr) {
+        return;
+    }
+    cout << current->data << " ";
+    if(k == 0) {
+        afisAlternativaArbore(current->left, 1);
+    }else {
+        afisAlternativaArbore(current->right, 0);
+    }
+}
+
+void ex22() {
+    ArboreGeneric<int> *arbore = new ArboreGeneric<int>;
+    arbore->root = arbore->citirePre();
+
+    afisAlternativaArbore(arbore->root);
+}
+
+//sa se gaseasca al x-lea nod afisat la parcurgerea in postordine
+
+NodeGen<int>* xElemPostArbore(NodeGen<int>* current, int x,int&ct) {
+    if(current == nullptr) {
+        return nullptr;
+    }
+    NodeGen<int> *p = xElemPostArbore(current->left, x,ct);
+    if(p != nullptr) {
+        return p;
+    }
+    NodeGen<int> *p1 = xElemPostArbore(current->right, x,ct);
+    if(p1 != nullptr) {
+        return p1;
+    }
+    if(x == ct) {
+        return current;
+    }
+    ct++;
+    return nullptr;
+}
+
+void ex23() {
+    ArboreGeneric<int> *arbore = new ArboreGeneric<int>;
+    arbore->root = arbore->citirePre();
+    int x = 1, ind = 0;
+
+    NodeGen<int> *node = xElemPostArbore(arbore->root, x,ind);
+    cout << node->data;
+}
+
+//sa se genereze un arbore de cautare din n noduri, generate aleator, care sunt cuburi perfecte
+
+void ex24() {
+    ArboreBinar *arbore = new ArboreBinar(5);
+
+
+}
+
 #endif //EXERCITIIARBORI_H

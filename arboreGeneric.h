@@ -25,6 +25,13 @@ struct ArboreGeneric {
         return node;
     }
 
+    void afisPost(NodeGen<U> *current) {
+        if(current == nullptr) return;
+        afisPost(current->left);
+        afisPost(current->right);
+        cout << current->data << " ";
+    }
+
     void afisareNivel() {
         if(root == nullptr) {
             return;
