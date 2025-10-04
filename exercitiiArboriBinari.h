@@ -754,10 +754,125 @@ void ex23() {
 
 //sa se genereze un arbore de cautare din n noduri, generate aleator, care sunt cuburi perfecte
 
-void ex24() {
-    ArboreBinar *arbore = new ArboreBinar(5);
-
-
+bool isCube(int nr) {
+    if(nr < 8) {
+        return false;
+    }
+    for(int i = 2; i <= nr / 3; i++) {
+        if(i * i * i == nr) {
+            return true;
+        }
+    }
+    return false;
 }
 
+void citireAleatorieArbBin(ArboreBinar *arbore, int n) {
+    srand(time(nullptr));
+    for(int i = 0; i < n; i++) {
+        int aux = rand();
+        while(aux > 50) {
+            aux = rand();
+        }
+        if(isCube(aux)) {
+            arbore->addChild(arbore->root, aux);
+        }
+        else {
+            arbore->addChild(arbore->root, aux * aux * aux);
+        }
+    }
+}
+
+int minArbBin(BinaryNode *root) {
+    if(root == nullptr) {
+        return 0;
+    }
+
+    while(root->left != nullptr) {
+        root = root->left;
+    }
+
+    return root->data;
+}
+
+int maxArbBin(BinaryNode *root) {
+    if(root == nullptr) {
+        return 0;
+    }
+
+    while(root->right != nullptr) {
+        root = root->right;
+    }
+
+    return root->data;
+}
+
+void ex24() {
+    ArboreBinar *arbore = new ArboreBinar(64);
+    int n = 7;
+    citireAleatorieArbBin(arbore,n);
+
+    arbore->afisare();
+    cout << minArbBin(arbore->root) << " " << maxArbBin(arbore->root) << endl;
+}
+
+//sa se construiasca un vec. cu inf. unui arbore binar plasate in ordine crescatoare
+
+void vecArbBin(BinaryNode *root, int v[], int&dim) {
+    if(root == nullptr) {
+        return;
+    }
+    vecArbBin(root->left, v, dim);
+    v[dim++] = root->data;
+    vecArbBin(root->right, v, dim);
+}
+
+void ex25() {
+    ArboreBinar *arbore = new ArboreBinar(64);
+    citireArbore(arbore);
+    int v[100]{}, dim = 0;
+    vecArbBin(arbore->root, v,dim);
+
+    for(int i = 0; i < dim; i++) {
+        cout << v[i] << " ";
+    }
+}
+
+//sa se insereze intr-un arbore de cautare pentru fiecare frunza o val. egala cu dublul frunzei si sa se afis. rez. in preordine
+
+void add2xLeafArbBin(ArboreBinar *arbore) {
+    if(arbore == nullptr) {
+        return;
+    }
+
+    BinaryNode *current = nullptr;
+    Queue<BinaryNode *> *queue = new Queue<BinaryNode*>;
+    queue->capacity = 100;
+    queue->push(arbore->root);
+
+    while(!queue->isEmpty()) {
+        int size = queue->count;
+        for(int i = 0; i < size; i++) {
+            current = queue->pop()->data;
+
+            if(current->left != nullptr) {
+                queue->push(current->left);
+            }
+            if(current->right != nullptr) {
+                queue->push(current->right);
+            }
+
+            if(current->left == nullptr && current->right == nullptr) {
+                arbore->addChild(arbore->root,current->data * 2);
+            }
+        }
+    }
+}
+
+void ex26() {
+    ArboreBinar *arbore = new ArboreBinar(50);
+    citireArbore(arbore);
+
+    add2xLeafArbBin(arbore);
+    arbore->preorder(arbore->root);
+}
 #endif //EXERCITIIARBORI_H
